@@ -12,6 +12,7 @@ pub struct ScanArguments {
     pub target_ip: String,
     pub ports: Option<String>,
     pub threads: usize,
+    pub timeout: u16,
 }
 
 impl ScanArguments {
@@ -44,7 +45,17 @@ impl ScanArguments {
                 .value_name("THREAD")
                 .required(false)
                 .default_value("100")
-            ).get_matches();
+            ).
+            arg(
+                Arg::new("timeout")
+                .help("Set manual timeout")
+                .short('T')
+                .long("timeout")
+                .value_name("TIMEOUT")
+                .required(false)
+                .default_value("500")
+            )
+            .get_matches();
 
         let target: String = matches
             .get_one::<String>("target")
@@ -59,10 +70,17 @@ impl ScanArguments {
             .parse::<usize>()
             .expect("Thread count must be a valid number");
 
+        let timeout = matches
+            .get_one::<String>("timeout")
+            .expect("A valid timeout required")
+            .parse::<u16>()
+            .expect("Timeout needed to be an unsigned integer");
+
         Self {
             target_ip: target,
             ports: ports_value,
             threads: threads,
+            timeout: timeout,
         }
     }
 }

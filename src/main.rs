@@ -38,7 +38,7 @@ fn main() -> () {
 
     println!("{}", "[*] Starting Scan".with(Color::Cyan));
 
-    let open_ports = scan_ports(ip, ports.clone(), args.threads);
+    let open_ports = scan_ports(ip, ports.clone(), args.threads, args.timeout);
 
     println!("    {:<10} {}", "PORTS", "STATUS");
     println!("    {}", "-".repeat(20));

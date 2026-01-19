@@ -63,8 +63,8 @@ rustmap 192.168.1.1 -p 80
 # Scan a range of ports
 rustmap example.com -p 1-1000
 
-# Scan with custom thread count
-rustmap 192.168.1.1 -p 1-65535 -t 200
+# Scan with custom thread count and timeout
+rustmap 192.168.1.1 -p 1-65535 -t 200 -T 100
 ```
 
 ### Options
@@ -74,6 +74,7 @@ rustmap 192.168.1.1 -p 1-65535 -t 200
 | Target  | -     | -           | IP address or hostname (required)              | -       |
 | Ports   | `-p`  | `--ports`   | Port(s) to scan: single (80) or range (1-1000) | 1-10000 |
 | Threads | `-t`  | `--threads` | Number of concurrent threads                   | 100     |
+| Timeout | `-T`  | `--timeout` | Timeout for scanning port                      | 500     |
 
 ### Advanced Examples
 
