@@ -153,7 +153,7 @@ rustmap/
 
 ## Roadmap
 
-- _[] Service detection (identify what's running on open ports)_
+~~ [] Service detection (identify what's running on open ports) ~~
 - [ ] Output to file (JSON, CSV, XML formats)
 - [ ] Progress bar with `indicatif`
 - [ ] IPv6 support
