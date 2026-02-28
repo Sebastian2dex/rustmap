@@ -75,6 +75,7 @@ rustmap 192.168.1.1 -p 1-65535 -t 200 -T 100
 | Ports   | `-p`  | `--ports`   | Port(s) to scan: single (80) or range (1-1000) | 1-10000 |
 | Threads | `-t`  | `--threads` | Number of concurrent threads                   | 100     |
 | Timeout | `-T`  | `--timeout` | Timeout for scanning port                      | 500     |
+| Banner  | `-g`  | `--banner`  | Enable banner grabbing on open ports           | -       |
 
 ### Advanced Examples
 
@@ -105,12 +106,13 @@ rustmap localhost -p 22
 ```
 rustmap/
 ├── src/
-│   ├── main.rs       # Entry point and orchestration
-│   ├── args.rs       # CLI argument parsing (clap)
-│   ├── target.rs     # DNS resolution and IP handling
-│   ├── ports.rs      # Port range parsing
-│   ├── scanner.rs    # Multi-threaded port scanning logic
-│   └── style.rs      # ASCII art and branding
+│   ├── main.rs             # Entry point and orchestration
+│   ├── args.rs             # CLI argument parsing (clap)
+│   ├── target.rs           # DNS resolution and IP handling
+│   ├── ports.rs            # Port range parsing
+│   ├── scanner.rs          # Multi-threaded port scanning logic
+│   ├── style.rs            # ASCII art and branding
+|   └── banner_grab.rs      # Banner Grabbing
 └── Cargo.toml
 ```
 
@@ -151,7 +153,7 @@ rustmap/
 
 ## Roadmap
 
-- [ ] Service detection (identify what's running on open ports)
+- _[] Service detection (identify what's running on open ports)_
 - [ ] Output to file (JSON, CSV, XML formats)
 - [ ] Progress bar with `indicatif`
 - [ ] IPv6 support
