@@ -1,5 +1,5 @@
 mod args;
-mod banner;
+mod banner_grab;
 mod ports;
 mod scanner;
 mod style;

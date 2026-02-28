@@ -1,4 +1,4 @@
-use crate::banner::banner;
+use crate::banner_grab::banner_grab;
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
 use std::ops::RangeInclusive;
 use std::thread::spawn;
@@ -41,7 +41,7 @@ pub fn scan_ports(
                 {
                     let banner = if grab {
                         // Use a slightly longer timeout for banner read than for connect
-                        banner(target, port, t_out as u64 * 2)
+                        banner_grab(target, port, t_out as u64 * 2)
                     } else {
                         None
                     };
@@ -61,7 +61,7 @@ pub fn scan_ports(
         result.extend(open_ports);
     }
 
-    result.sort_unstable_by_key(|(port, _)| *port); // sort in ascending order - slightly faster than sort()
+    result.sort_unstable_by_key(|(port, _)| *port);
 
     result // All open ports
 }

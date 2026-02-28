@@ -3,7 +3,7 @@ use std::net::Ipv4Addr;
 use std::net::{SocketAddrV4, TcpStream};
 use std::time::Duration;
 
-pub fn banner(target: Ipv4Addr, port: u16, timeout_ms: u64) -> Option<String> {
+pub fn banner_grab(target: Ipv4Addr, port: u16, timeout_ms: u64) -> Option<String> {
     let timeout = Duration::from_millis(timeout_ms);
     let addr = SocketAddrV4::new(target, port);
 
@@ -13,8 +13,10 @@ pub fn banner(target: Ipv4Addr, port: u16, timeout_ms: u64) -> Option<String> {
     stream.set_write_timeout(Some(timeout)).ok()?;
 
     if matches!(port, 80 | 443 | 8000 | 8001 | 8888 | 3000 | 5000) {
-        let request: String =
-            format!("HEAD / HTTP/1.0\r\nHost: {target}\r\nUser-Agent: rustmap/1.0\r\n\r\n");
+        let request: String = format!(
+            "HEAD / HTTP/1.0\r\nHost: {}\r\nUser-Agent: rustmap/1.0\r\n\r\n",
+            target
+        );
         stream.write_all(request.as_bytes()).ok()?;
     };
 
