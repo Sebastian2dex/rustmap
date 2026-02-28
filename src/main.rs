@@ -3,6 +3,7 @@ mod ports;
 mod scanner;
 mod style;
 mod target;
+mod banner;
 
 use args::ScanArguments;
 use ports::parse_ports;
