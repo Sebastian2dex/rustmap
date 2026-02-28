@@ -1,10 +1,17 @@
+use crate::banner::banner;
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
 use std::ops::RangeInclusive;
 use std::thread::spawn;
 use std::time::Duration;
 
 #[allow(unused)]
-pub fn scan_ports(target: Ipv4Addr, ports: RangeInclusive<u16>, thread_count: usize, t_out: u16) -> Vec<u16> {
+pub fn scan_ports(
+    target: Ipv4Addr,
+    ports: RangeInclusive<u16>,
+    thread_count: usize,
+    t_out: u16,
+    grab: bool
+) -> Vec<u16> {
     let total_ports: u16 = ports.end() - ports.start() + 1;
 
     // ceil division
@@ -26,8 +33,18 @@ pub fn scan_ports(target: Ipv4Addr, ports: RangeInclusive<u16>, thread_count: us
             for port in chunk_start..=chunk_end {
                 let sock_addr = SocketAddrV4::new(target, port);
 
-                if TcpStream::connect_timeout(&sock_addr.into(), Duration::from_millis(t_out as u64)).is_ok()
+                if TcpStream::connect_timeout(
+                    &sock_addr.into(),
+                    Duration::from_millis(t_out as u64),
+                )
+                .is_ok()
                 {
+                    let banner = if grab {
+                        // Use a slightly longer timeout for banner read than for connect
+                        banner(target, port, t_out as u64 * 2)
+                    } else {
+                        None
+                    };
                     open_ports.push(port);
                 }
             }
