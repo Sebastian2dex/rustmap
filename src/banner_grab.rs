@@ -33,6 +33,10 @@ pub fn banner_grab(target: Ipv4Addr, port: u16, timeout_ms: u64) -> Option<Strin
 }
 
 fn parse_banner(data: &[u8], port: u16) -> Option<String> {
+    if matches!(port, 3306 | 5432 | 6379 | 27017) {
+        return Some(service_hint(port));
+    }
+
     let text = String::from_utf8_lossy(data);
 
     if text.starts_with("HTTP/") {
@@ -61,7 +65,7 @@ fn parse_banner(data: &[u8], port: u16) -> Option<String> {
         .take(80)
         .collect();
 
-    if cleaned.is_empty() {
+    if cleaned.is_empty() || cleaned.len() < 3 {
         return Some(service_hint(port));
     }
 
