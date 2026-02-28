@@ -33,7 +33,7 @@ pub fn banner(target: Ipv4Addr, port: u16, timeout_ms: u64) -> Option<String> {
 fn parse_banner(data: &[u8], port: u16) -> Option<String> {
     let text = String::from_utf8_lossy(data);
 
-    if (text.starts_with("HTTP/")) {
+    if text.starts_with("HTTP/") {
         for line in text.lines() {
             let lower = line.to_lowercase();
             if lower.starts_with("server:") {
