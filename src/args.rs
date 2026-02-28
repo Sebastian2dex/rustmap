@@ -13,6 +13,7 @@ pub struct ScanArguments {
     pub ports: Option<String>,
     pub threads: usize,
     pub timeout: u16,
+    pub grab: bool,
 }
 
 impl ScanArguments {
@@ -54,6 +55,14 @@ impl ScanArguments {
                 .value_name("TIMEOUT")
                 .required(false)
                 .default_value("500")
+            ).
+            arg(
+                Arg::new("banner")
+                .help("Enable banner grabbing on open ports")
+                .short('g')
+                .long("banner")
+                .action(clap::ArgAction::SetTrue)
+                .required(false)
             )
             .get_matches();
 
@@ -76,11 +85,14 @@ impl ScanArguments {
             .parse::<u16>()
             .expect("Timeout needed to be an unsigned integer");
 
+        let grab = matches.get_flag("banner");
+
         Self {
             target_ip: target,
             ports: ports_value,
             threads: threads,
             timeout: timeout,
+            grab: grab,
         }
     }
 }
