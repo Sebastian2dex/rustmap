@@ -1,9 +1,9 @@
 mod args;
+mod banner;
 mod ports;
 mod scanner;
 mod style;
 mod target;
-mod banner;
 
 use args::ScanArguments;
 use ports::parse_ports;
@@ -39,10 +39,15 @@ fn main() -> () {
 
     println!("{}", "[*] Starting Scan".with(Color::Cyan));
 
-    let open_ports = scan_ports(ip, ports.clone(), args.threads, args.timeout);
+    let open_ports = scan_ports(ip, ports.clone(), args.threads, args.timeout, args.grab);
 
-    println!("    {:<10} {}", "PORTS", "STATUS");
-    println!("    {}", "-".repeat(20));
+    if args.grab {
+        println!("\n    {:<10} {:<10} {}", "PORT", "STATUS", "BANNER");
+        println!("    {}", "-".repeat(60));
+    } else {
+        println!("\n    {:<10} {}", "PORT", "STATUS");
+        println!("    {}", "-".repeat(20));
+    }
 
     // handling closed ports
     if open_ports.is_empty() {
@@ -57,8 +62,20 @@ fn main() -> () {
             );
         }
     } else {
-        for port in open_ports {
-            println!("[+] {:<10}    {}", port, "OPEN".green());
+       for (port, banner_opt) in &open_ports {
+            if args.grab {
+                let banner_str = banner_opt
+                    .as_deref()
+                    .unwrap_or("—");
+                println!(
+                    "[+] {:<10} {:<10} {}",
+                    port,
+                    "OPEN".green(),
+                    banner_str.with(Color::DarkYellow)
+                );
+            } else {
+                println!("[+] {:<10}    {}", port, "OPEN".green());
+            }
         }
     }
 
